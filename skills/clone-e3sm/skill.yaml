@@ -1,0 +1,25 @@
+name: clone-e3sm
+description: Clone the E3SM git repository (git@github.com:E3SM-Project/E3SM.git) into the project directory. Creates the project directory if it does not exist.
+inputs:
+  - name: target_dir
+    type: string
+    optional: true
+    description: Parent directory to clone into (default: "project" relative to the current working directory)
+  - name: branch
+    type: string
+    optional: true
+    description: Branch or tag to check out after cloning (e.g., "master", "v3.0.0"). Omit to use the default branch.
+  - name: depth
+    type: integer
+    optional: true
+    description: Create a shallow clone with this many commits of history (e.g., 1 for fastest download). Omit for a full clone.
+outputs:
+  - name: clone_path
+    type: string
+    description: Absolute path where E3SM was cloned
+  - name: status
+    type: string
+    description: "success" or "skipped" (if the target already exists)
+  - name: message
+    type: string
+    description: Human-readable summary of what happened
