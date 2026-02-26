@@ -1,0 +1,59 @@
+name: make-elm-sitedata
+description: >
+  Create single-point ELM domain and surface data files for an AmeriFlux site
+  from global ELM inputdata. Locates the nearest 0.5-degree gridcell in the
+  global domain and surfdata files, extracts all variables at that cell, then
+  applies single-point overrides:
+    - frac=1.0, mask=1 in the domain file
+    - PCT_NATVEG=100, PCT_NAT_PFT from PTCLM table, PCT_SAND/CLAY from PTCLM,
+      LANDFRAC_PFT=1, PFTDATA_MASK=1 in the surface data file
+  PFT and soil data for known AmeriFlux sites are bundled from the elm-olmt
+  PTCLM lookup tables (data/ directory).
+inputs:
+  - name: site_id
+    type: string
+    description: AmeriFlux site ID (e.g. "US-NR1")
+  - name: lat
+    type: number
+    description: Site latitude in decimal degrees (north positive)
+  - name: lon
+    type: number
+    description: Site longitude in decimal degrees (west negative)
+  - name: inputdata_dir
+    type: string
+    description: >
+      Root directory of the downloaded global ELM inputdata tree.
+      The skill auto-discovers the domain file under share/domains/ and
+      the surface dataset under lnd/clm2/surfdata_map/.
+  - name: out_dir
+    type: string
+    optional: true
+    description: >
+      Output directory; two files are written here (default: project/sitedata/{site_id}).
+        domain.lnd.1x1pt_{site_id_nohyphen}.nc
+        surfdata_1x1pt_{site_id_nohyphen}.nc
+  - name: domain_file
+    type: string
+    optional: true
+    description: >
+      Explicit path to the global domain file (e.g. domain.lnd.360x720_cruncep.100429.nc).
+      If omitted, the skill searches under inputdata_dir/share/domains/.
+  - name: surfdata_file
+    type: string
+    optional: true
+    description: >
+      Explicit path to the global surface data file (e.g. surfdata_360x720cru_simyr1850.nc).
+      If omitted, the skill searches under inputdata_dir/lnd/clm2/surfdata_map/.
+outputs:
+  - name: domain_file
+    type: string
+    description: Absolute path of the written single-point domain NetCDF file
+  - name: surfdata_file
+    type: string
+    description: Absolute path of the written single-point surface data NetCDF file
+  - name: out_dir
+    type: string
+    description: Absolute path of the output directory
+  - name: status
+    type: string
+    description: '"success" or error message'
