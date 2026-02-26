@@ -1,0 +1,40 @@
+name: write-elm-forcing
+description: >
+  Convert AmeriFlux BASE HH/HR (ERA5 gap-filled) CSV data to ELM (E3SM Land Model)
+  cpl_bypass site forcing format (all_hourly.nc). Handles:
+    - LST -> UTC time conversion (AmeriFlux timestamps are in Local Standard Time)
+    - Feb-29 removal (ELM indexes forcing with a 365-day no-leap calendar)
+    - Unit conversions: T (C->K), P (kPa->Pa), precip (mm/interval->mm/s)
+    - RH (%) written as-is (ELM site type reads variable named RH, not QBOT)
+inputs:
+  - name: site_id
+    type: string
+    description: AmeriFlux site ID (e.g. "US-NR1")
+  - name: lat
+    type: number
+    description: Site latitude in decimal degrees (north positive)
+  - name: lon
+    type: number
+    description: Site longitude in decimal degrees (west negative)
+  - name: data_dir
+    type: string
+    optional: true
+    description: Directory containing the AmeriFlux CSV (default: project/ameriflux/{site_id})
+  - name: out_dir
+    type: string
+    optional: true
+    description: Output directory; all_hourly.nc is written here (default: project/forcing/{site_id})
+  - name: utc_offset_h
+    type: number
+    optional: true
+    description: "LST offset from UTC in hours (e.g. -7 for MST). Estimated from longitude if omitted."
+outputs:
+  - name: output_file
+    type: string
+    description: Absolute path of the written all_hourly.nc file
+  - name: out_dir
+    type: string
+    description: Absolute path of the output directory
+  - name: status
+    type: string
+    description: '"success" or error message'

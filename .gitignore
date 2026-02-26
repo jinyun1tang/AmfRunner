@@ -1,0 +1,12 @@
+# Downloaded AmeriFlux data
+Ameriflux/
+Ameriflux
+
+# Cloned model source and generated outputs
+project/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
